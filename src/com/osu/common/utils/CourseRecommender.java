@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.osu.common.constants.CommonConstants;
+import com.osu.dao.base.impl.CourseDAOImpl;
+import com.osu.dao.base.interfaces.CourseDAO;
+import com.osu.database.pojo.CoursePojo;
 
 public class CourseRecommender {
 	
@@ -35,6 +38,12 @@ public class CourseRecommender {
 		CourseRecommender cr = new CourseRecommender();
 		ArrayList<String> list = cr.recommend3AreasRandom();
 		return list;
+	}
+	
+	public static ArrayList<CoursePojo> recommendCourses(String courseArea) {
+		CourseDAO dao = new CourseDAOImpl();
+		ArrayList<CoursePojo> courseList = dao.fetchCoursesForCourseArea(courseArea);
+		return courseList;
 	}
 	
 	

@@ -91,3 +91,9 @@ a:hover {
 div.icon + h6 {
 	font-weight: 500;	
 }
+
+/* disable nav bar navigation */
+.wizard-navigation a {
+	pointer-events: none; 
+	cursor: default;
+}

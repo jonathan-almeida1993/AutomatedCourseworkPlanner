@@ -16,9 +16,13 @@ import com.google.gson.Gson;
 import com.osu.common.constants.CommonConstants;
 import com.osu.common.utils.CatalogParser;
 import com.osu.common.utils.CourseRecommender;
+import com.osu.common.utils.ProgramGenerator;
 import com.osu.dao.base.impl.CourseDAOImpl;
 import com.osu.dao.base.interfaces.CourseDAO;
+import com.osu.database.pojo.CourseAreaPojo;
 import com.osu.database.pojo.CoursePojo;
+import com.osu.database.pojo.CoursePojoList;
+import com.osu.database.pojo.ProgramPojo;
 
 
 @WebServlet("/DataController")
@@ -50,7 +54,7 @@ public class DataController extends HttpServlet {
 		String operation = request.getParameter("message");
 		String jsonData = request.getParameter("JDATA");
 
-		System.out.println("DataController:: OP = "+operation+"::JDATA = "+jsonData+"	::\n");
+		System.out.println("DataController:: OP = "+operation+"::JDATA = "+jsonData);
 		if(operation != null && CommonConstants.OP_FETCH_COURSE_AREAS.equals(operation)) {
 			//process catalog info and store into DB
 			Gson gson = new Gson();
@@ -58,7 +62,35 @@ public class DataController extends HttpServlet {
 			System.out.println("CourseList = "+courseList);
 			response.getWriter().write(courseList);
 		}else if(operation != null && CommonConstants.OP_GET_COURSES.equals(operation)) {
+			Gson gson = new Gson();
+			CourseAreaPojo courseAreas = gson.fromJson(jsonData, CourseAreaPojo.class);
 			
+			CourseDAO dao = new CourseDAOImpl();
+			HashMap<String, ArrayList<CoursePojo>> courseList = new HashMap<>();
+			courseList.put("CourseArea1", dao.fetchCoursesForCourseArea(courseAreas.getCourseArea1()));
+			courseList.put("CourseArea2", dao.fetchCoursesForCourseArea(courseAreas.getCourseArea2()));
+			courseList.put("CourseArea3", dao.fetchCoursesForCourseArea(courseAreas.getCourseArea3()));
+
+			response.getWriter().write(gson.toJson(courseList));
+		}else if (operation != null && CommonConstants.OP_ALL_GET_COURSES.equals(operation)) {
+			Gson gson = new Gson();
+			CourseDAO dao = new CourseDAOImpl();
+			ArrayList<CoursePojo> courseList = dao.fetchAllCourses();
+			response.getWriter().write(gson.toJson(courseList));
+		}else if (operation != null && CommonConstants.OP_GENERATE_POS.equals(operation)) {
+			Gson gson = new Gson();
+			CoursePojoList courseList = gson.fromJson(jsonData, CoursePojoList.class);
+			ProgramPojo program = new ProgramPojo();
+			program.setCoursework(courseList);
+			program.setResearch(false);
+			program.setFirstName("Jonathan");
+			program.setLastName("Almeida");
+			ArrayList<String> command = ProgramGenerator.parseProgramOfStudyInfo(program);
+			ProgramGenerator.generatePDF(command);
+			/*for(int i =0; i< courseList.getResults().size(); i++) {
+				CoursePojo obj = courseList.getResults().get(i);
+				System.out.println(obj.getCode()+" - "+obj.getTitle());
+			}*/
 		}
 		System.out.println("DataController:: Exiting");
 	}

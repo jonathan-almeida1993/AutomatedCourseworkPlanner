@@ -68,4 +68,65 @@ public class CourseDAOImpl implements CourseDAO {
 		}
 		return status;
 	}
+	
+	public ArrayList<CoursePojo> fetchCoursesForCourseArea(String courseArea){
+		
+		Connection conn = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String status =  CommonConstants.JDBC_ERROR;
+		ArrayList<CoursePojo> courseList = new ArrayList<CoursePojo>();
+		
+		try {
+			conn = getConnection();
+			preparedStatement = conn.prepareStatement(SqlConstants.FETCH_COURSES);
+			preparedStatement.setString(1, courseArea);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				CoursePojo singleCourse = new CoursePojo();
+				singleCourse.setCode(resultSet.getString("course_code"));
+				singleCourse.setTitle(resultSet.getString("course_title"));
+				singleCourse.setCredits(resultSet.getInt("credits"));
+				singleCourse.setWeight(resultSet.getInt("weight"));
+				courseList.add(singleCourse);
+			}
+			status = CommonConstants.JDBC_OK;
+		}catch(Exception ex) {
+			status = CommonConstants.JDBC_ERROR;
+			ex.printStackTrace();
+		}finally {
+			DBConnectionFactory.close(resultSet, preparedStatement, conn);
+		}
+		return courseList;
+	}
+	
+	public ArrayList<CoursePojo> fetchAllCourses(){
+		
+		Connection conn = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String status =  CommonConstants.JDBC_ERROR;
+		ArrayList<CoursePojo> courseList = new ArrayList<CoursePojo>();
+		
+		try {
+			conn = getConnection();
+			preparedStatement = conn.prepareStatement(SqlConstants.FETCH_ALL_COURSES);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				CoursePojo singleCourse = new CoursePojo();
+				singleCourse.setCode(resultSet.getString("course_code"));
+				singleCourse.setTitle(resultSet.getString("course_title"));
+				singleCourse.setCredits(resultSet.getInt("credits"));
+				singleCourse.setWeight(resultSet.getInt("weight"));
+				courseList.add(singleCourse);
+			}
+			status = CommonConstants.JDBC_OK;
+		}catch(Exception ex) {
+			status = CommonConstants.JDBC_ERROR;
+			ex.printStackTrace();
+		}finally {
+			DBConnectionFactory.close(resultSet, preparedStatement, conn);
+		}
+		return courseList;
+	}
 }

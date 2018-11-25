@@ -31,7 +31,7 @@
 		            <div class="wizard-container">
 		                
 		                <div class="wizard-card" data-color="purple" id="wizard">
-			                <form action="" method="">
+			                <!-- <form action="" method=""> -->
 
 			                	<!-- wizard-header starts -->
 		                    	<div class="wizard-header">
@@ -50,7 +50,7 @@
 		                    	<!-- wizard-navigation starts -->
 								<div class="wizard-navigation">
 									<ul>
-			                            <li><a href="#interestArea" data-toggle="tab">Area of Interest</a></li>
+			                            <li><a href="#interestArea" data-toggle="tab" >Area of Interest</a></li>
 			                            <li><a href="#courseArea" data-toggle="tab">Course Areas</a></li>
 			                            <li><a href="#courses" data-toggle="tab">Courses</a></li>
 			                            <li><a href="#finalizeCourses" data-toggle="tab">Finalize Courses</a></li>
@@ -73,7 +73,7 @@
 											<div class="col-sm-6 col-sm-offset-3">
 		                                    	<div class="form-group label-floating">
 		                                            <label class="control-label">Area of Interest</label>
-	                                            	<select name="areaOfInterest" class="form-control">
+	                                            	<select name="areaOfInterest" class="form-control" id="selectAreaOfInterest">
 														<option disabled="" selected=""></option>
 														<option value="Data Science">Data Science</option>
 														<option value="Artificial Intelligence">Artificial Intelligence</option>
@@ -95,40 +95,33 @@
 		                            <!-- course area tab starts -->
 		                            <div class="tab-pane" id="courseArea">
 		                                <h4 class="info-text">The following 3 course areas have been selected based on your area of interest. You may change them if you like.</h4>
-		                                <div class="row">
-		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	<div class="form-group label-floating">
-		                                        	<label class="control-label">Course Area #1</label>
-		                                        	<select class="form-control">
-		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
-		                                        	</select>
-		                                    	</div>
-		                                    </div>	                                    
-		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	<div class="form-group label-floating">
-		                                        	<label class="control-label">Course Area #2</label>
-		                                        	<select class="form-control">
-		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
-		                                        	</select>
-		                                    	</div>
-		                                    </div>
-		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	<div class="form-group label-floating">
-		                                        	<label class="control-label">Course Area #3</label>
-		                                        	<select class="form-control">
-		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
-		                                        	</select>
-		                                    	</div>
-		                                    </div>
+		                                <div class="row" id="courseAreaDiv">
+		                                	<form id="courseAreaForm">
+			                                    <div class="col-xs-4 col-xs-offset-4">
+			                                    	<div class="form-group label-floating">
+			                                        	<label class="control-label">Course Area #1</label>
+			                                        	<select class="form-control" id="selectCourseArea1" name="courseArea1">
+			                                            	<!-- <option disabled="" selected=""></option> -->
+			                                        	</select>
+			                                    	</div>
+			                                    </div>	                                    
+			                                    <div class="col-xs-4 col-xs-offset-4">
+			                                    	<div class="form-group label-floating">
+			                                        	<label class="control-label">Course Area #2</label>
+			                                        	<select class="form-control" id="selectCourseArea2" name="courseArea2">
+			                                            	<!-- <option disabled="" selected=""></option> -->
+			                                        	</select>
+			                                    	</div>
+			                                    </div>
+			                                    <div class="col-xs-4 col-xs-offset-4">
+			                                    	<div class="form-group label-floating">
+			                                        	<label class="control-label">Course Area #3</label>
+			                                        	<select class="form-control" id="selectCourseArea3" name="courseArea3">
+			                                            	<!-- <option disabled="" selected=""></option> -->
+			                                        	</select>
+			                                    	</div>
+			                                    </div>
+		                                     </form>
 		                                </div>
 		                            </div>
 		                            <!-- course area tab ends -->
@@ -136,18 +129,15 @@
 		                            <!-- Courses tab starts -->
 		                            <div class="tab-pane" id="courses">
 		                                <h4 class="info-text">Two course for each area have been selected, based on your interest. You may change the courses if you like.</h4>
-		                                <div class="row">
+		                                <div class="row" id="courseArea1CoursesDiv">
 		                                	<div class="col-xs-4 col-xs-offset-3">
-		                                    	  <p class="description">Course Area #1 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #1 : <span class="courseArea1Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-4">
 		                                    	<div class="form-group label-floating">
 		                                        	<label class="control-label">Course #1</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>	                                    
@@ -156,9 +146,6 @@
 		                                        	<label class="control-label">Course #2</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>
@@ -167,18 +154,15 @@
 
 		                                </div>
 
-		                                <div class="row">
+		                                <div class="row" id="courseArea2CoursesDiv">
 		                                	<div class="col-xs-4 col-xs-offset-3">
-		                                    	  <p class="description">Course Area #2 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #2 : <span class="courseArea2Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-4">
 		                                    	<div class="form-group label-floating">
 		                                        	<label class="control-label">Course #1</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>	                                    
@@ -187,9 +171,6 @@
 		                                        	<label class="control-label">Course #2</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>
@@ -199,18 +180,15 @@
 		                                </div>
 
 
-		                                <div class="row">
+		                                <div class="row" id="courseArea3CoursesDiv">
 		                                	<div class="col-xs-4 col-xs-offset-3">
-		                                    	  <p class="description">Course Area #3 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #3 : <span class="courseArea3Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-4">
 		                                    	<div class="form-group label-floating">
 		                                        	<label class="control-label">Course #1</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>	                                    
@@ -219,9 +197,6 @@
 		                                        	<label class="control-label">Course #2</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
-		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
 		                                        	</select>
 		                                    	</div>
 		                                    </div>
@@ -263,40 +238,40 @@
 		                                <h4 class="info-text">Please finalize your remaining courses that you must take in addition to your course area courses.</h4>
 										<div class="row">
 		                                	<div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #1 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #1 : <span class="courseArea1Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea1Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea1Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 											<div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #2 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #2 : <span class="courseArea2Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea2Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea2Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #3 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #3 : <span class="courseArea3Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea3Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea3Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 		                                     <div class="col-xs-6 col-xs-offset-3 separator"></div>
 
 		                                </div>
 
-										<div class="row">
+										<div class="row" id="additionalCoursesDiv">
 											<div class="col-xs-8 col-xs-offset-3">
 												<p class="description">Additional Required Courses:</p>
 											</div>
@@ -306,9 +281,9 @@
 		                                        	<label class="control-label">Course #1</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
+		                                            	<!-- <option>Business</option>
 		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
+		                                            	<option>Work</option> -->
 		                                        	</select>
 		                                    	</div>
 		                                    </div>	                                    
@@ -317,9 +292,9 @@
 		                                        	<label class="control-label">Course #2</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
+		                                            	<!-- <option>Business</option>
 		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
+		                                            	<option>Work</option> -->
 		                                        	</select>
 		                                    	</div>
 		                                    </div>
@@ -328,9 +303,9 @@
 		                                        	<label class="control-label">Course #3</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
+		                                            	<!-- <option>Business</option>
 		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
+		                                            	<option>Work</option> -->
 		                                        	</select>
 		                                    	</div>
 		                                    </div>
@@ -339,9 +314,9 @@
 		                                        	<label class="control-label">Course #4</label>
 		                                        	<select class="form-control">
 		                                            	<option disabled="" selected=""></option>
-		                                            	<option>Business</option>
+		                                            	<!-- <option>Business</option>
 		                                            	<option>Vacation </option>
-		                                            	<option>Work</option>
+		                                            	<option>Work</option> -->
 		                                        	</select>
 		                                    	</div>
 		                                    </div>		                                    
@@ -368,33 +343,33 @@
 		                                    	  <a href="#" id="editCourseArea">Edit</a>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #1 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #1 : <span class="courseArea1Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea1Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea1Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 											<div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #2 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #2 : <span class="courseArea2Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea2Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea2Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 		                                    <div class="col-xs-4 col-xs-offset-4">
-		                                    	  <p class="description">Course Area #3 : [Area previously selected]</p>
+		                                    	  <p class="description">Course Area #3 : <span class="courseArea3Desc">[Area previously selected]</span></p>
 		                                    </div>
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #1 : [Course Name]</p>
+		                                    	<p class="description">Course #1 : <span class="courseArea3Course1Desc">[Course Name]</span></p>
 		                                    </div>	                                    
 		                                    <div class="col-xs-4 col-xs-offset-5">
-		                                    	<p class="description">Course #2 : [Course Name]</p>
+		                                    	<p class="description">Course #2 : <span class="courseArea3Course2Desc">[Course Name]</span></p>
 		                                    </div>
 
 		                                     <div class="col-xs-6 col-xs-offset-3 separator"></div>
@@ -427,7 +402,10 @@
 		                                    <div class="col-xs-2 col-xs-offset-1">
 		                                    	  <a href="#" id="editAdditionalCourses">Edit</a>
 		                                    </div>
-		                                    <div class="col-xs-4 col-xs-offset-5">
+		                                    <div id="additionalCoursesDesc">
+		                                    
+		                                    </div>
+		                                    <!-- <div class="col-xs-4 col-xs-offset-5">
 		                                    	  <p class="description">Course #1: [Course Name]</p>
 		                                    </div>
 		                                    
@@ -441,7 +419,7 @@
 
 		                                    <div class="col-xs-4 col-xs-offset-5">
 		                                    	  <p class="description">Course #4: [Course Name]</p>
-		                                    </div>
+		                                    </div> -->
 		                                     <div class="col-xs-6 col-xs-offset-3 separator"></div>
 
 		                                </div>
@@ -454,8 +432,8 @@
 		                        <!-- wizard-footer starts -->
 		                        <div class="wizard-footer">
 	                            	<div class="pull-right">
-	                                    <input type='button' class='btn btn-next btn-fill btn-custom btn-warning btn-wd' name='next' value='Next' />
-	                                    <input type='button' class='btn btn-finish btn-fill btn-custom btn-warning btn-wd' name='finish' value='Finish' />
+	                                    <input type='button' class='btn btn-next btn-fill btn-custom btn-warning btn-wd' id="nextBtn" name='next' value='Next' />
+	                                    <input type='button' class='btn btn-finish btn-fill btn-custom btn-warning btn-wd' id="finishBtn" name='finish' value='Finish' />
 	                                </div>
 	                                <div class="pull-left">
 	                                    <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
@@ -464,7 +442,7 @@
 		                        </div>
 		                        <!-- wizard-footer ends -->
 
-			                </form>
+			                <!-- </form> -->
 		                </div>
 		            </div> <!-- wizard container -->
 		        </div>
@@ -483,5 +461,10 @@
 
 	<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
 	<script src="js/jquery.validate.min.js"></script>
+	
+	<!-- JS files for application functionality -->
+	<script src="js/jquery.serializejson.min.js"></script>
+	<script src="js/datatransfer.js"></script>
+	<script src="js/master.js"></script>
 
 </html>

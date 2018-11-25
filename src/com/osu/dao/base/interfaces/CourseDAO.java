@@ -10,5 +10,7 @@ public interface CourseDAO extends GenericDAO {
 	
 	public String populateDatabase(ArrayList<CoursePojo> courseDetails);
 
+	public ArrayList<CoursePojo> fetchCoursesForCourseArea(String courseArea);
 	
+	public ArrayList<CoursePojo> fetchAllCourses();
 }
