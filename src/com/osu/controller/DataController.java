@@ -1,6 +1,8 @@
 package com.osu.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class DataController extends HttpServlet {
 
 		if(operation != null && CommonConstants.OP_PARSE_CATALOG.equals(operation)) {
 			//process catalog info and store into DB
-			HashMap<String, CoursePojo> courseDetails = CatalogParser.processCourseCatalog("D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/src/com/osu/common/catalog/cs.json");
+			HashMap<String, CoursePojo> courseDetails = CatalogParser.processCourseCatalog("D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/src/com/osu/common/catalog/rob.json","ROB");
 			ArrayList<CoursePojo> courseDetailsList = new ArrayList<CoursePojo>();
 			for(String key: courseDetails.keySet()) {
 				courseDetailsList.add(courseDetails.get(key));
@@ -49,14 +51,12 @@ public class DataController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		String operation = request.getParameter("message");
 		String jsonData = request.getParameter("JDATA");
 
 		System.out.println("DataController:: OP = "+operation+"::JDATA = "+jsonData);
 		if(operation != null && CommonConstants.OP_FETCH_COURSE_AREAS.equals(operation)) {
-			//process catalog info and store into DB
 			Gson gson = new Gson();
 			String courseList = gson.toJson(CourseRecommender.recommendCourseAreas(jsonData));
 			System.out.println("CourseList = "+courseList);
@@ -77,20 +77,6 @@ public class DataController extends HttpServlet {
 			CourseDAO dao = new CourseDAOImpl();
 			ArrayList<CoursePojo> courseList = dao.fetchAllCourses();
 			response.getWriter().write(gson.toJson(courseList));
-		}else if (operation != null && CommonConstants.OP_GENERATE_POS.equals(operation)) {
-			Gson gson = new Gson();
-			CoursePojoList courseList = gson.fromJson(jsonData, CoursePojoList.class);
-			ProgramPojo program = new ProgramPojo();
-			program.setCoursework(courseList);
-			program.setResearch(false);
-			program.setFirstName("Jonathan");
-			program.setLastName("Almeida");
-			ArrayList<String> command = ProgramGenerator.parseProgramOfStudyInfo(program);
-			ProgramGenerator.generatePDF(command);
-			/*for(int i =0; i< courseList.getResults().size(); i++) {
-				CoursePojo obj = courseList.getResults().get(i);
-				System.out.println(obj.getCode()+" - "+obj.getTitle());
-			}*/
 		}
 		System.out.println("DataController:: Exiting");
 	}

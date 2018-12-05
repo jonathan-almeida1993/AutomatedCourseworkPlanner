@@ -15,6 +15,7 @@ import java.util.Timer;
 
 import com.google.gson.Gson;
 import com.osu.common.constants.PDFOtterParameters;
+import com.osu.database.pojo.CoursePojo;
 import com.osu.database.pojo.CoursePojoList;
 import com.osu.database.pojo.ProgramPojo;
 
@@ -22,6 +23,7 @@ public class ProgramGenerator{
 	
     private static final String ADDRESS = "127.0.0.1";
     private static final int PORT = 65432;
+    private static final String PYTHON_COMPONENT = "D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF";
     
     public static void sendServerData(String data) {
     	
@@ -63,110 +65,51 @@ public class ProgramGenerator{
             System.out.println(i); 
         } 
     }
-
-	public static void main(String args[]) throws IOException, InterruptedException {
-		Gson gson = new Gson();
-		HashMap<String, String> pdfOtterParams = new HashMap<>();
-		pdfOtterParams.put(PDFOtterParameters.CourseTitle1,"THEORY OF COMPUTATION");
-		pdfOtterParams.put(PDFOtterParameters.CourseTitle2,"SOFTWARE ENGINEERING METHODS");
-		pdfOtterParams.put(PDFOtterParameters.CourseTitle3,"ARTIFICIAL INTELLIGENCE");
-		pdfOtterParams.put(PDFOtterParameters.EMAIL,"almeidaj@oregonstate.edu");
-		pdfOtterParams.put(PDFOtterParameters.FIRSTNAME,"JONATHAN");
-		pdfOtterParams.put(PDFOtterParameters.LASTNAME,"ALMEIDA");
-		pdfOtterParams.put(PDFOtterParameters.MS,"x");
-		pdfOtterParams.put(PDFOtterParameters.NONTHESIS,"x");
-		String jsonStr = gson.toJson(pdfOtterParams);
-		System.out.println("PDF String = "+jsonStr);
-		System.out.println("PDF String length = "+jsonStr.length());
-		
-		ProcessBuilder pb = new ProcessBuilder("py","C:/Temp/generatePDF.py");
-	    pb.directory(new File("C:/Temp"));
+    
+    public static void createPDF(ProgramPojo program) throws IOException, InterruptedException {
+    	//create json string
+    	String jsonStr = createProgramJSON(program);
+    	
+    	//send the json string to server
+		ProcessBuilder pb = new ProcessBuilder("py",PYTHON_COMPONENT+"/generatePDF.py");
+	    pb.directory(new File(PYTHON_COMPONENT));
 	    pb.redirectErrorStream(true);
 	    Process p = pb.start();
 	    Thread.sleep(5000);
 		sendServerData(jsonStr);
-	}
-	
-	public static ArrayList<String> parseProgramOfStudyInfo(ProgramPojo program) {
-		
-	    ArrayList<String> command = new ArrayList<>();
-	    /*create a curl command with authentication parameters*/
-	    command.add("curl");
-	    command.add("-X");
-	    command.add("POST");
-	    command.add("https://www.pdfotter.com/api/v1/pdf_templates/tem_G2r8QYm5bHroPf/fill");
-	    command.add("-u");
-	    command.add("test_o4PWUBbYZ87K45jrKGswbQCFvYe4vNt3:");
-	    
-	    /*parse program details and add them to the command*/
-	    command.add("-d");
-	    command.add("data[First Name]="+program.getFirstName());
-	    command.add("-d");
-	    command.add("data[Last Name ]="+program.getLastName());
-	    command.add("-d");
-	    command.add("data[MS]=x");
-		command.add("-d");
-//		command.add("data[CourseTitle1]="+coursework.getResults().get(1).getTitle());
-		command.add("data[CourseTitle1]=THEORY OF COMPUTATION");
-		command.add("-d");
-		command.add("data[DeptRow1]=CS");
-		command.add("-d");
-		command.add("data[NoRow1]=325");
-		command.add("-d");
-		command.add("data[CourseTitle2]=THEORY OF COMPUTATION");
-		command.add("-d");
-		command.add("data[CourseTitle3]=THEORY OF COMPUTATION");
-	    //add courses to the command
-	    //addCourses(command, program.getCoursework());
-	    return command;
-	}
+		Thread.sleep(5000);
+    }
 
-	private static void addCourses(ArrayList<String> command, CoursePojoList coursework) {
-		command.add("-d");
-//		command.add("data[CourseTitle1]="+coursework.getResults().get(1).getTitle());
-		command.add("data[CourseTitle1]='THEORY'");
-		command.add("-d");
-		command.add("data[DeptRow1]=CS");
-		command.add("-d");
-		command.add("data[NoRow1]=325");
-		command.add("-d");
-		command.add("data[CourseTitle2]=THEORY OF COMPUTATION");
-		command.add("-d");
-		command.add("data[CourseTitle3]=THEORY OF COMPUTATION");
-//		command.add("data[CourseTitle2]="+coursework.getResults().get(1).getTitle());
-/*		command.add("-d");
-		command.add("data[CourseTitle3]="+coursework.getResults().get(1).getTitle());
-		command.add("-d");
-		command.add("data[CourseTitle4]="+coursework.getResults().get(1).getTitle());*/
-	}
+    public static String createProgramJSON(ProgramPojo program) {
+    	String jsonStr = null;
+    	Gson gson = new Gson();
+		HashMap<String, String> pdfOtterParams = new HashMap<>();
+		ArrayList<CoursePojo> coursework = program.getResults();
+		for(int i = 0; i < coursework.size(); i++) {
+			String courseDept = "";
+			String courseNo = "";
+			if(coursework.get(i).getCode().contains(" ")) {
+				courseDept = coursework.get(i).getCode().split(" ")[0];
+				courseNo = coursework.get(i).getCode().split(" ")[1];
+			}
+			pdfOtterParams.put(PDFOtterParameters.CourseTitle.replaceAll("#", ""+(i+1)),coursework.get(i).getTitle());
+			pdfOtterParams.put(PDFOtterParameters.CourseDept.replaceAll("#", ""+(i+1)),courseDept);
+			pdfOtterParams.put(PDFOtterParameters.CourseNo.replaceAll("#", ""+(i+1)),courseNo);
+		}
+		pdfOtterParams.put(PDFOtterParameters.EMAIL,program.getEmail());
+		pdfOtterParams.put(PDFOtterParameters.FIRSTNAME,program.getFirstName());
+		pdfOtterParams.put(PDFOtterParameters.LASTNAME,program.getLastName());
+		pdfOtterParams.put(PDFOtterParameters.MS,"x");
+		if(program.isResearch()) {
+			pdfOtterParams.put(PDFOtterParameters.THESIS,"x");
+		}else {
+			pdfOtterParams.put(PDFOtterParameters.NONTHESIS,"x");
+		}
+		jsonStr = gson.toJson(pdfOtterParams);
+		System.out.println("PDF String = "+jsonStr);
+		System.out.println("PDF String length = "+jsonStr.length());
+    	return jsonStr;
+    }
+    
 
-	public static void generatePDF(ArrayList<String> command) throws IOException {
-
-	    ProcessBuilder pb = new ProcessBuilder(command);
-	    pb.directory(new File("C:/Temp"));
-	    pb.redirectErrorStream(true);
-	    Process p = pb.start();
-	    InputStream is = p.getInputStream();
-
-	    FileOutputStream outputStream = new FileOutputStream("C:/Temp/program_of_study.pdf");
-
-	    BufferedInputStream bis = new BufferedInputStream(is);
-	    int x = 1000000;
-	    byte[] bytes = new byte[x];
-	    int numberByteReaded;
-	    while ((numberByteReaded = bis.read(bytes, 0, 1000000)) != -1) {
-	        outputStream.write(bytes, 0, numberByteReaded);
-	        Arrays.fill(bytes, (byte) 0);
-	    }
-
-	    outputStream.flush();
-	    outputStream.close();
-	}
-	
-	public static void checkPDFPy() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("py","C:/Temp/generatePDF.py");
-	    pb.directory(new File("C:/Temp"));
-	    pb.redirectErrorStream(true);
-	    Process p = pb.start();
-	}
 }

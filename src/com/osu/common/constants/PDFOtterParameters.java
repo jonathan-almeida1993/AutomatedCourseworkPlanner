@@ -28,7 +28,7 @@ public interface PDFOtterParameters {
 		String EMAIL = "data[Email Address]";
 		String NONTHESIS = "data[NonThesis]";
 		String THESIS = "data[Thesis]";
-		String CourseTitle1 = "data[CourseTitle1]";
-		String CourseTitle2 = "data[CourseTitle2]";
-		String CourseTitle3 = "data[CourseTitle3]";
+		String CourseTitle = "data[CourseTitle#]";
+		String CourseDept = "data[DeptRow#]";
+		String CourseNo = "data[NoRow#]";
 }

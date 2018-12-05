@@ -21,6 +21,9 @@ public class CourseRecommender {
 		courseAreaList.add(CommonConstants.PL);
 		courseAreaList.add(CommonConstants.SE);
 		courseAreaList.add(CommonConstants.TCS);
+		courseAreaList.add(CommonConstants.ST);
+		courseAreaList.add(CommonConstants.BUS);
+		courseAreaList.add(CommonConstants.ROB);
 	}
 	
 	

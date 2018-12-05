@@ -97,3 +97,14 @@ div.icon + h6 {
 	pointer-events: none; 
 	cursor: default;
 }
+
+#remainingCredits {
+	font-weight: normal;
+	color: #db4508;
+}
+
+.specifyCredits label{
+/* 	text-align: center;
+    width: fit-content; */
+/*     font-size: small; */
+}

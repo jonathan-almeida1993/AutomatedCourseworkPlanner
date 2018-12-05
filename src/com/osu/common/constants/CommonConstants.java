@@ -27,6 +27,9 @@ public interface CommonConstants {
 	String SE = "Software Engineering";
 	String HCI = "Human Computer Interaction";
 	String CVG = "Computer Vision and Graphics";
+	String ST = "Statistics";
+	String BUS = "Business";
+	String ROB = "Robotics";
 	
 	String COURSES_TCS = "CS 515,CS 517,CS 52X";
 	String COURSES_AI = "CS 53X";
@@ -35,6 +38,9 @@ public interface CommonConstants {
 	String COURSES_SE = "CS 560,CS 561,CS 562,CS 563,CS 564,CS 567,CS 569";
 	String COURSES_HCI = "CS 564,CS 565,CS 567,CS 568,ROB 567";
 	String COURSES_CVG = "CS 55X";
+	String COURSES_ST = "ST 5XX, ST 6XX";
+	String COURSES_BA = "BA 5XX, BA 6XX";
+	String COURSES_ROB = "ROB 5XX, ROB 6XX";
 	String OP_GENERATE_POS = "generateProgramOfStudy";
 	
 }

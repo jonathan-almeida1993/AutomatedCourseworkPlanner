@@ -1,13 +1,21 @@
 package com.osu.common.utils;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+
 import com.google.gson.Gson;
 import com.osu.common.constants.CommonConstants;
 import com.osu.database.pojo.CoursePojo;
 import com.osu.database.pojo.CoursePojoList;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class CatalogParser {
 	
@@ -22,9 +30,12 @@ public class CatalogParser {
 		courseCourseAreaMap.put(CommonConstants.COURSES_PL, CommonConstants.PL);
 		courseCourseAreaMap.put(CommonConstants.COURSES_SE, CommonConstants.SE);
 		courseCourseAreaMap.put(CommonConstants.COURSES_TCS, CommonConstants.TCS);
+		courseCourseAreaMap.put(CommonConstants.COURSES_ST, CommonConstants.ST);
+		courseCourseAreaMap.put(CommonConstants.COURSES_BA, CommonConstants.BUS);
+		courseCourseAreaMap.put(CommonConstants.COURSES_ROB, CommonConstants.ROB);
 	}
 	
-	public static HashMap<String, CoursePojo> processCourseCatalog(String filename) {
+	public static HashMap<String, CoursePojo> processCourseCatalog(String filename, String dept) {
 		
 		HashMap<String, CoursePojo> courseDetails = new HashMap<String, CoursePojo>();
 		Gson gson = new Gson();
@@ -45,15 +56,21 @@ public class CatalogParser {
 		
 		for(CoursePojo obj: courseList.getResults()) {
 			if(!courseDetails.containsKey(obj.getCode())) {
-				obj.setDept("CS");
+				obj.setDept(dept);
 				String courseArea = new CatalogParser().identifyCourseArea(obj.getCode());
 				obj.setCourseArea(courseArea);
 				courseDetails.put(obj.getCode(), obj);
+				try {
+					obj.setCredits(fetchCreditHours(obj));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		for(String key: courseDetails.keySet()) {
-			System.out.println("\"<option value='"+courseDetails.get(key).getCode()+"'>"+courseDetails.get(key).getCode()+"-"+courseDetails.get(key).getTitle()+"</option>\"+");
+			System.out.println("\"<option value='"+courseDetails.get(key).getCode()+"'>"+courseDetails.get(key).getCode()+"-"+courseDetails.get(key).getTitle()+"-hrs = "+courseDetails.get(key).getCredits()+"</option>\"+");
 		}
 		
 		return courseDetails;
@@ -78,7 +95,45 @@ public class CatalogParser {
 				return courseCourseAreaMap.get(key);
 			}
 		}
-		
+	
+		/*For ST courses*/
+		courseCodeGeneralized = courseCode.substring(0, courseCode.length() - 2) + "XX";
+		for(String key: courseCourseAreaMap.keySet()) {
+			if(key.contains(courseCodeGeneralized)) {
+				return courseCourseAreaMap.get(key);
+			}
+		}
 		return "NaN";
+	}
+	
+	public static int fetchCreditHours(CoursePojo obj) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		Gson gson = new Gson();
+		MediaType mediaType = MediaType.parse("application/json");
+		//RequestBody body = RequestBody.create(mediaType, "{\"group\":\"code:ST 511\",\"key\":\"crn:30367\",\"srcdb\":\"201902\"}");
+		String jsonStr = "{\"group\":\"code:"+obj.getCode()+"\",\"key\":\"crn:"+obj.getCrn()+"\",\"srcdb\":\""+obj.getSrcdb()+"\"}";
+		System.out.println(obj.getSrcdb());
+		System.out.println("Query = "+jsonStr);
+		RequestBody body = RequestBody.create(mediaType, jsonStr);
+		Request request = new Request.Builder()
+		  .url("https://classes.oregonstate.edu/api/?page=fose&route=details")
+		  .post(body)
+		  .addHeader("content-type", "application/json")
+		  .addHeader("cache-control", "no-cache")
+		  .addHeader("postman-token", "5e73255f-3771-2e4e-dcdd-43abfc68d2e5")
+		  .build();
+
+		Response response = client.newCall(request).execute();
+		String responseJson = response.body().string();
+		//change hours_html credits -- better naming convention
+		System.out.println("Response = "+responseJson);
+		CoursePojo creditHours = gson.fromJson(responseJson, CoursePojo.class);
+		try {
+			creditHours.setCredits(Integer.parseInt(creditHours.getHours_html()));
+		}catch(Exception ex) {
+			creditHours.setCredits(0);
+		}
+		System.out.println(creditHours.getCredits());
+		return creditHours.getCredits();
 	}
 }

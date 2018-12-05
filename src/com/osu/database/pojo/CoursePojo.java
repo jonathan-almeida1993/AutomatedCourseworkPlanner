@@ -4,7 +4,7 @@ public class CoursePojo {
 	
 	//key,code,title,crn,no,total,schd,stat,isCancelled,meets,mpkey,instr,start_date,end_date,srcdb
 	
-	private int key;
+	private int courseId;
 	private String code;
 	private String title;
 	private int crn;
@@ -16,12 +16,16 @@ public class CoursePojo {
 	private String courseArea;
 	private String term;
 	private int weight;
+	private String group;
+	private String srcdb;
+	private String key;
+	private String hours_html;
 	
-	public int getKey() {
-		return key;
+	public int getCourseId() {
+		return courseId;
 	}
-	public void setKey(int key) {
-		this.key = key;
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
 	}
 	public String getCode() {
 		return code;
@@ -88,6 +92,30 @@ public class CoursePojo {
 	}
 	public void setWeight(int weight) {
 		this.weight = weight;
+	}
+	public String getGroup() {
+		return group;
+	}
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	public String getSrcdb() {
+		return srcdb;
+	}
+	public void setSrcdb(String srcdb) {
+		this.srcdb = srcdb;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String getHours_html() {
+		return hours_html;
+	}
+	public void setHours_html(String hours_html) {
+		this.hours_html = hours_html;
 	}
 	
 	
