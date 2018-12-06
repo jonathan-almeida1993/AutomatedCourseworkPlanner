@@ -60,6 +60,7 @@ public class DataController extends HttpServlet {
 			Gson gson = new Gson();
 			String courseList = gson.toJson(CourseRecommender.recommendCourseAreas(jsonData));
 			System.out.println("CourseList = "+courseList);
+			response.setCharacterEncoding("utf-8");
 			response.getWriter().write(courseList);
 		}else if(operation != null && CommonConstants.OP_GET_COURSES.equals(operation)) {
 			Gson gson = new Gson();

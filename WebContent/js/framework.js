@@ -458,6 +458,8 @@ function saveCourseAreaCoursesState(){
 /*Appends the following course areas to the three course area dropdowns*/
 function populateCourseAreaDropDown(){
 	
+		$("#courseAreaDiv select").empty();
+	
 		var courseAreas = "<option value='Theoretical Computer Science'>Theoretical Computer Science</option>"+
 		"<option value='Artificial Intelligence'>Artificial Intelligence</option>"+
 		"<option value='Computer Systems'>Computer Systems</option>"+
