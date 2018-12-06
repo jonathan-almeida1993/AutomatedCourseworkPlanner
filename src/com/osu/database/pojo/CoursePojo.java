@@ -20,6 +20,7 @@ public class CoursePojo {
 	private String srcdb;
 	private String key;
 	private String hours_html;
+	private boolean isBlanket;
 	
 	public int getCourseId() {
 		return courseId;
@@ -117,6 +118,12 @@ public class CoursePojo {
 	public void setHours_html(String hours_html) {
 		this.hours_html = hours_html;
 	}
-	
-	
+	public boolean isBlanket() {
+		return isBlanket;
 	}
+	public void setBlanket(boolean isBlanket) {
+		this.isBlanket = isBlanket;
+	}
+	
+	
+}

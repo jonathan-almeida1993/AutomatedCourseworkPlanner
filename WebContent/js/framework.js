@@ -99,6 +99,35 @@ $(document).ready(function(){
 		
 	});
 	
+	
+	$('#finishBtn').click(function(){
+
+			/*collect data from program object and send it to server in the 
+			format specified in the ProgramPojo*/
+			
+			var courseList = [];
+			
+			courseList.push(program.CourseArea1.Course1);
+			courseList.push(program.CourseArea1.Course2);
+			courseList.push(program.CourseArea2.Course1);
+			courseList.push(program.CourseArea2.Course2);
+			courseList.push(program.CourseArea3.Course1);
+			courseList.push(program.CourseArea3.Course2);
+			
+			$(program.AdditionalCourses).each(function(idx, obj){
+					courseList.push(obj);
+			});
+			
+			courseList = JSON.stringify(courseList).replace(/name/g,'code');
+			
+			var programStr = '{"results":'+courseList+',"type":"'+program.Type+'","blanketCredits":'+program.blanketCredits+',"bucketCredits":'
+								+program.bucketCredits+',"capstoneCredits":'+program.capstoneCredits+',"otherCredits":'+program.otherCredits+'}';
+			
+			//append json string to form input and submit the form
+			$('#submitPOS input').val(programStr);
+			$('#submitPOS').submit();
+	});
+	
 });// END OF READY
 
 
@@ -422,10 +451,12 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea1.Course1.name = courseArea1Course1Selector.val();
 		program.CourseArea1.Course1.title = courseArea1Course1Selector.data('title');
 		program.CourseArea1.Course1.credits = courseArea1Course1Selector.data('credits');
+		program.CourseArea1.Course1.isBlanket = false;
 
 		program.CourseArea1.Course2.name = courseArea1Course2Selector.val();
 		program.CourseArea1.Course2.title = courseArea1Course2Selector.data('title');
 		program.CourseArea1.Course2.credits = courseArea1Course2Selector.data('credits');
+		program.CourseArea1.Course2.isBlanket = false;
 		
 		/*save course area #2 state*/
 		var courseArea2Course1Selector = $($('#courseArea2CoursesDiv select')[0]).find('option:selected');
@@ -433,10 +464,12 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea2.Course1.name = courseArea2Course1Selector.val();
 		program.CourseArea2.Course1.title = courseArea2Course1Selector.data('title');
 		program.CourseArea2.Course1.credits = courseArea2Course1Selector.data('credits');
+		program.CourseArea2.Course1.isBlanket = false;
 
 		program.CourseArea2.Course2.name = courseArea2Course2Selector.val();
 		program.CourseArea2.Course2.title = courseArea2Course2Selector.data('title');
 		program.CourseArea2.Course2.credits = courseArea2Course2Selector.data('credits');
+		program.CourseArea2.Course2.isBlanket = false;
 
 		/*save course area #3 state*/
 		var courseArea3Course1Selector = $($('#courseArea3CoursesDiv select')[0]).find('option:selected');
@@ -444,10 +477,12 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea3.Course1.name = courseArea3Course1Selector.val();
 		program.CourseArea3.Course1.title = courseArea3Course1Selector.data('title');
 		program.CourseArea3.Course1.credits = courseArea3Course1Selector.data('credits');
+		program.CourseArea3.Course1.isBlanket = false;
 
 		program.CourseArea3.Course2.name = courseArea3Course2Selector.val();
 		program.CourseArea3.Course2.title = courseArea3Course2Selector.data('title');
 		program.CourseArea3.Course2.credits = courseArea3Course2Selector.data('credits');
+		program.CourseArea3.Course2.isBlanket = false;
 		
 		program.Type = $('input[name=courseType][checked=checked]').val();
 		program.Desc = $('input[name=courseType][checked=checked]').parent().data('original-title');

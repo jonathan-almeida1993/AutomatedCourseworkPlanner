@@ -9,6 +9,11 @@ public class ProgramPojo {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String type;
+	private int blanketCredits;
+	private int bucketCredits;
+	private int capstoneCredits;
+	private int otherCredits;
 	
 	public String getEmail() {
 		return email;
@@ -51,5 +56,47 @@ public class ProgramPojo {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public int getBlanketCredits() {
+		return blanketCredits;
+	}
+
+	public void setBlanketCredits(int blanketCredits) {
+		this.blanketCredits = blanketCredits;
+	}
+
+	public int getBucketCredits() {
+		return bucketCredits;
+	}
+
+	public void setBucketCredits(int bucketCredits) {
+		this.bucketCredits = bucketCredits;
+	}
+
+	public int getCapstoneCredits() {
+		return capstoneCredits;
+	}
+
+	public void setCapstoneCredits(int capstoneCredits) {
+		this.capstoneCredits = capstoneCredits;
+	}
+
+	public int getOtherCredits() {
+		return otherCredits;
+	}
+
+	public void setOtherCredits(int otherCredits) {
+		this.otherCredits = otherCredits;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
 
 }
