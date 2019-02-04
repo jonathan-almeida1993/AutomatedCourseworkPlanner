@@ -114,6 +114,7 @@ public class CourseDAOImpl implements CourseDAO {
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				CoursePojo singleCourse = new CoursePojo();
+				singleCourse.setCrn(resultSet.getInt("course_crn"));
 				singleCourse.setCode(resultSet.getString("course_code"));
 				singleCourse.setTitle(resultSet.getString("course_title"));
 				singleCourse.setCredits(resultSet.getInt("credits"));
@@ -128,5 +129,39 @@ public class CourseDAOImpl implements CourseDAO {
 			DBConnectionFactory.close(resultSet, preparedStatement, conn);
 		}
 		return courseList;
+	}
+	
+	public String updateGradStanding(ArrayList<CoursePojo> courseDetails) {
+		String status = CommonConstants.JDBC_ERROR;
+		Connection conn = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		//"UPDATE course_master SET is_grad_course=? WHERE course_crn=?"
+		try {
+			conn = getConnection();
+			preparedStatement = conn.prepareStatement(SqlConstants.UPDATE_GRAD_STANDING);
+			for(int i = 0; i < courseDetails.size(); i++) {
+				CoursePojo singleCourse = courseDetails.get(i);
+				preparedStatement.setBoolean(1, singleCourse.isGradCourse());
+				preparedStatement.setInt(2, singleCourse.getCrn());
+				preparedStatement.addBatch();
+			}
+			int[] executionStatus = preparedStatement.executeBatch();
+			status = CommonConstants.JDBC_OK;
+			
+			for(int s: executionStatus) {
+				if(!(s >= 0)) {
+					status = CommonConstants.JDBC_ERROR;
+					break;
+				}
+			}
+			
+		}catch(Exception ex) {
+			status = CommonConstants.JDBC_ERROR;
+			ex.printStackTrace();
+		}finally{
+			DBConnectionFactory.close(resultSet, preparedStatement, conn);
+		}
+		return status;
 	}
 }

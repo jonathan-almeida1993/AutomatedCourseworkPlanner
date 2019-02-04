@@ -46,6 +46,8 @@ public class DataController extends HttpServlet {
 			CourseDAO dao = new CourseDAOImpl();
 			String status = dao.populateDatabase(courseDetailsList);
 			System.out.println("Populate DB Status: "+status);
+		}else if(operation != null && CommonConstants.OP_IS_GRAD_COURSE.equals(operation)) {
+			CatalogParser.getGraduateStanding();
 		}
 		response.getWriter().append("Served at: ").append(request.getContextPath()).append("\nOP = ").append(operation);
 	}

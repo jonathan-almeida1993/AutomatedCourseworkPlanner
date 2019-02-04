@@ -3,10 +3,16 @@ package com.osu.common.utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+
+import org.apache.catalina.tribes.util.Arrays;
 
 import com.google.gson.Gson;
 import com.osu.common.constants.CommonConstants;
+import com.osu.dao.base.impl.CourseDAOImpl;
+import com.osu.dao.base.interfaces.CourseDAO;
 import com.osu.database.pojo.CoursePojo;
 import com.osu.database.pojo.CoursePojoList;
 
@@ -136,4 +142,62 @@ public class CatalogParser {
 		System.out.println(creditHours.getCredits());
 		return creditHours.getCredits();
 	}
+	
+	
+	public static void getGraduateStanding() {
+		
+		ArrayList<CoursePojo> courseList = new ArrayList<CoursePojo>();
+		CourseDAO dao = new CourseDAOImpl();
+		courseList = dao.fetchAllCourses();
+		
+		for(int i = 0; i < courseList.size(); i++){
+			CoursePojo obj = courseList.get(i);
+			try {
+				obj.setGradCourse(fetchGraduateStanding(obj.getCrn()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		dao.updateGradStanding(courseList);
+	}
+	
+	public static boolean fetchGraduateStanding(int crn) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		Gson gson = new Gson();
+		MediaType mediaType = MediaType.parse("application/json");
+		//{"key":"crn:50056"}
+		String jsonStr = "{\"key\":\"crn:"+crn+"\"}";
+		RequestBody body = RequestBody.create(mediaType, jsonStr);
+		Request request = new Request.Builder()
+		  .url("https://classes.oregonstate.edu/api/?page=fose&route=details")
+		  .post(body)
+		  .addHeader("content-type", "application/json")
+		  .addHeader("cache-control", "no-cache")
+		  .addHeader("postman-token", "5e73255f-3771-2e4e-dcdd-43abfc68d2e5")
+		  .build();
+
+		Response response = client.newCall(request).execute();
+		String responseJson = response.body().string();
+		//change clssnotes to isGradStanding -- better naming convention
+		System.out.println("Course = "+crn);
+		System.out.println("		Response = "+responseJson);
+		if(responseJson == null || responseJson.equals("null")) {
+			return true;
+		}
+		CoursePojo gradStanding = gson.fromJson(responseJson, CoursePojo.class);
+		try {
+			if(gradStanding.getClssnotes().contains("not")){
+				gradStanding.setGradCourse(false);
+			}else {
+				gradStanding.setGradCourse(true);
+			}
+		}catch(Exception ex) {
+			gradStanding.setGradCourse(true);
+		}
+		System.out.println("		isGradCourse = "+gradStanding.isGradCourse());
+		return gradStanding.isGradCourse();
+	}
+	
 }

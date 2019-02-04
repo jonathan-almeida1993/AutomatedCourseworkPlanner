@@ -20,6 +20,8 @@ public class CoursePojo {
 	private String srcdb;
 	private String key;
 	private String hours_html;
+	private boolean isGradCourse;
+	private String clssnotes;
 	private boolean isBlanket;
 	
 	public int getCourseId() {
@@ -124,6 +126,17 @@ public class CoursePojo {
 	public void setBlanket(boolean isBlanket) {
 		this.isBlanket = isBlanket;
 	}
-	
-	
+	public String getClssnotes() {
+		return clssnotes;
+	}
+	public void setClssnotes(String clssnotes) {
+		this.clssnotes = clssnotes;
+	}
+	public boolean isGradCourse() {
+		return isGradCourse;
+	}
+	public void setGradCourse(boolean isGradCourse) {
+		this.isGradCourse = isGradCourse;
+	}
+
 }

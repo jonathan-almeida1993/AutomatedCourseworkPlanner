@@ -3,6 +3,7 @@ package com.osu.common.constants;
 public interface CommonConstants {
 
 	String OP_PARSE_CATALOG = "parseCatalog";
+	String OP_IS_GRAD_COURSE = "isGradCourse";
 	String OP_FETCH_COURSE_AREAS = "fetchCourseAreas";
 	String OP_GET_COURSES = "getCourses";
 	String OP_ALL_GET_COURSES = "getAllCourses";
