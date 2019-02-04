@@ -88,7 +88,7 @@ $(document).ready(function(){
 					/*apply validations on additional courses*/
 					if(!validateAdditionalCourses()){
 						
-						alert('Please check the courses you have selected. You need to have atleast 45 credits in total, and Blanket Credits cannot be more than 6.');
+						//alert('Please check the courses you have selected. You need to have atleast 45 credits in total, and Blanket Credits cannot be more than 6.');
 						$('#prevBtn').click();
 						
 					}
@@ -168,6 +168,9 @@ function restoreAdditionalCourses(){
 		
 		}
 		
+		/*this prints the current credit count on the additional courses tab after next is clicked on the previous tab*/
+		$('#currentCredits').text(program.blanketCredits + program.bucketCredits + program.capstoneCredits + program.otherCredits);
+		
 }
 
 
@@ -179,6 +182,52 @@ function printAdditionalCoursesOnFinish(){
 				$('#additionalCoursesDesc').append('<div class="col-xs-4 col-xs-offset-5"><p class="description">Course #'+(idx+1)+': '+obj.title+'</p></div>');
 		});
 		
+}
+
+/*this function updates the current courses count on additional courses tab:
+ * each time a change is made to one of the selects in additional courses,
+ * recompute the additional credit count and add it to bucket, blanket, and capstone credits*/
+$('#additionalCoursesDiv select').change(updateCurrentCreditCount);
+$('#additionalCoursesDiv').on("change","input.specifyCreditsInput",updateCurrentCreditCount);
+
+function updateCurrentCreditCount(){
+	
+	var tempAddCredits = 0;
+	
+	$('#additionalCoursesDiv select').each(function(idx, obj){	
+		
+		if( $(obj).val() != null && $(obj).val() != ""){
+				
+				var courseCode = $(obj).val();
+				var courseTitle = $(this).find('option:selected').data('title');
+				var creditCount = $(this).find('option:selected').data('credits');
+				var isBlanket = false;
+				
+				if(creditCount == 0){
+					/*this means this is a blanket course and it has custom credit count*/
+					creditCount = parseInt($(this).parent().parent().next().find('input.specifyCreditsInput').val());
+					isBlanket = true;
+					if(isNaN(creditCount)){
+						creditCount = 0;
+					}
+					console.log("Credit count for "+courseCode+" = "+creditCount);
+				}
+				
+				/*create new course object, set the attributes and push to program additionalCourses*/
+				/*additionalCourse = new Object();
+				additionalCourse.name = courseCode;
+				additionalCourse.title = courseTitle;
+				additionalCourse.credits = creditCount;
+				additionalCourse.isBlanket = isBlanket;
+				
+				program.AdditionalCourses.push(additionalCourse);*/
+				
+				tempAddCredits = tempAddCredits + creditCount;
+		}
+	});
+	
+	$('#currentCredits').text(program.bucketCredits + program.capstoneCredits + tempAddCredits);
+	
 }
 
 
@@ -198,11 +247,13 @@ function validateAdditionalCourses(){
 		
 		if(emptyCredits){
 			console.log("BLANKET CREDIT COUNT CANNOT BE EMPTY.");
+			alert("Blanket credit count cannot be empty.");
 			return false;
 		}
 		
 		if(program.blanketCredits > 6){
 			console.log("BLANKET CREDITS MORE THAN 6.");
+			alert("Blanket credits cannot be more than 6.");
 			return false;
 		}
 		
@@ -218,6 +269,7 @@ function validateAdditionalCourses(){
 						
 						if(program.AdditionalCourses[i].name == program.AdditionalCourses[j].name){
 								console.log('REPEATING COURSES AT '+i +' AND '+j);
+								alert("Courses at position "+i+" and "+j+" are same. Cannot select same courses multiple times.");
 								repeatingCourses = true;
 								break outer;
 						}
@@ -235,6 +287,7 @@ function validateAdditionalCourses(){
 		
 		if(total < parseInt(45)){
 			console.log("TOTAL CREDITS SHOULD BE ATLEAST 45. CURRENT TOTAL = "+total);
+			alert("Total credits should be atleast 45. Current total = "+total);
 			return false;
 		}
 		

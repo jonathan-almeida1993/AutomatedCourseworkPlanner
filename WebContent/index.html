@@ -127,7 +127,8 @@
 
 		                            <!-- Courses tab starts -->
 		                            <div class="tab-pane" id="courses">
-		                                <h4 class="info-text">Two course for each area have been selected, based on your interest. You may change the courses if you like.</h4>
+		                                <h4 class="info-text">Please select two courses for each of the following course areas. Also, select your course type.</h4>
+									<!--<h4 class="info-text">Two course for each area have been selected, based on your interest. You may change the courses if you like.</h4> -->
 		                                <div class="row" id="courseArea1CoursesDiv">
 		                                	<div class="col-xs-4 col-xs-offset-3">
 		                                    	  <p class="description">Course Area #1 : <span class="courseArea1Desc">[Area previously selected]</span></p>
@@ -284,9 +285,22 @@
 		                                </div>
 
 										<div class="row" id="additionalCoursesDiv">
+											<!-- <div class="col-xs-8 col-xs-offset-3">
+												<p class="description">Select Additional Courses: <span id="remainingCredits"></span></p>
+											</div> -->
+											
 											<div class="col-xs-8 col-xs-offset-3">
-												<p class="description">Additional Credits Required: <span id="remainingCredits"></span></p>
-											</div>
+										        <div class="row">
+										            <div class="col-xs-5">
+										    			<p class="description">Select Additional Courses:</p>
+										        	</div>
+										        
+										            <div class="col-xs-5 col-xs-offset-1">
+										                <p class="description">Credit Count = <span id="currentCredits"></span></p>
+										            </div>
+										         </div>
+    										</div>
+    										
 
 		                                    <div class="col-xs-4 col-xs-offset-4">
 		                                    	<div class="form-group label-floating">
@@ -497,7 +511,6 @@
 	<!-- JS files for application functionality -->
 	<script src="js/jquery.serializejson.min.js"></script>
 	<script src="js/datatransfer.js"></script>
-	<!-- <script src="js/master.js"></script> -->
+	<!-- <script src="js/master.js"></script>-->
 	<script src="js/framework.js"></script>
-
 </html>
