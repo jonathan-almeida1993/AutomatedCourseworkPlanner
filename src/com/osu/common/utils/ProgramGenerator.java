@@ -15,6 +15,8 @@ import java.util.Timer;
 
 import com.google.gson.Gson;
 import com.osu.common.constants.PDFOtterParameters;
+import com.osu.dao.base.impl.CourseDAOImpl;
+import com.osu.dao.base.interfaces.CourseDAO;
 import com.osu.database.pojo.CoursePojo;
 import com.osu.database.pojo.ProgramPojo;
 
@@ -83,6 +85,9 @@ public class ProgramGenerator{
     	String jsonStr = null;
     	Gson gson = new Gson();
 		HashMap<String, String> pdfOtterParams = new HashMap<>();
+		
+		CourseDAO dao = new CourseDAOImpl();
+		ArrayList<CoursePojo> slashCourses = dao.fetchSlashCourses();
 		
 		boolean isThesisSet = false;
 		boolean isProjectSet = false;
@@ -182,13 +187,21 @@ public class ProgramGenerator{
 				pdfOtterParams.put(PDFOtterParameters.CourseDept.replaceAll("#", ""+position),courseDept);
 				pdfOtterParams.put(PDFOtterParameters.CourseNo.replaceAll("#", ""+position),courseNo);
 				pdfOtterParams.put(PDFOtterParameters.CourseCr.replaceAll("#", ""+position),String.valueOf(course.getCredits()));
+				
+				/*check if this is a slash course*/
+				if(!isSlashCourse(slashCourses, course.getCode())) {
+					pdfOtterParams.put(PDFOtterParameters.SlashCr.replaceAll("#", ""+position),"G");
+				}
+				
 				position++;
 			}
 		}
 		
 		/*set miscellaneous figures*/
-		pdfOtterParams.put(PDFOtterParameters.GRAND_TOTAL_CR, String.valueOf(program.getBlanketCredits() + program.getCapstoneCredits() +
-																program.getBucketCredits() + program.getOtherCredits()));
+		int grandTotal = program.getBlanketCredits() + program.getCapstoneCredits() +
+							program.getBucketCredits() + program.getOtherCredits();
+		
+		pdfOtterParams.put(PDFOtterParameters.GRAND_TOTAL_CR, String.valueOf(grandTotal));
 		pdfOtterParams.put(PDFOtterParameters.BLANKET_TOTAL, String.valueOf(program.getBlanketCredits() + program.getCapstoneCredits()));
 		pdfOtterParams.put(PDFOtterParameters.ETHICAL_TRAINING, "CITI");
 		pdfOtterParams.put(PDFOtterParameters.ACAD_UNIT, "DEPT. OF ELECTRICAL ENGG. & COMPUTER SCI.");
@@ -198,11 +211,53 @@ public class ProgramGenerator{
 		pdfOtterParams.put(PDFOtterParameters.PHONE, "111 - 222 - 1234");
 		pdfOtterParams.put(PDFOtterParameters.TOTAL_COURSE_CR, String.valueOf(totalRegularCredits));
 		
+		/*get the total number of slash credits*/
+		int slashCredits = getSlashCreditCount(slashCourses, coursework);
+		
+		int gradCredits = grandTotal - slashCredits;
+		
+		pdfOtterParams.put(PDFOtterParameters.TOTAL_MAJOR_CR, String.valueOf(grandTotal));
+		pdfOtterParams.put(PDFOtterParameters.TOTAL_BLANKET_CR, String.valueOf(program.getBlanketCredits()));
+		pdfOtterParams.put(PDFOtterParameters.TOTAL_GRAD_CR, String.valueOf(gradCredits));
+		pdfOtterParams.put(PDFOtterParameters.TOTAL_SLASH_CR, String.valueOf(slashCredits));
+		
 		jsonStr = gson.toJson(pdfOtterParams);
 		System.out.println("PDF String = "+jsonStr);
 		System.out.println("PDF String length = "+jsonStr.length());
     	return jsonStr;
     }
+
     
+    private static int getSlashCreditCount(ArrayList<CoursePojo> slashCourses, ArrayList<CoursePojo> coursework) {
+    	int total = 0;
+    	
+    	for(CoursePojo course: coursework) {
+
+    		for(int i = 0; i < slashCourses.size(); i++) {
+    			CoursePojo obj = slashCourses.get(i);
+    			if(obj.getCode().equals(course.getCode())){
+    				total = total + course.getCredits();
+    				break;
+    			}
+    		}
+    	}
+    	
+    	return total;
+    }
+    
+    private static boolean isSlashCourse(ArrayList<CoursePojo> slashCourses, String courseCode) {
+    	boolean flag = false;
+    	
+    	for(CoursePojo course: slashCourses) {
+    		if(course.getCode().equals(courseCode)) {
+    			if(!course.isGradCourse()) {
+    				flag = true;
+    			}
+    			break;
+    		}
+    	}
+    	
+    	return flag;
+    }
 
 }

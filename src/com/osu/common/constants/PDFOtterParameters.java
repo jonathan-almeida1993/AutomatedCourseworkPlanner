@@ -64,6 +64,11 @@ public interface PDFOtterParameters {
 		String CourseDept = "data[DeptRow#]";
 		String CourseNo = "data[NoRow#]";
 		String CourseCr = "data[CrRow#]";
+		String SlashCr = "data[G#]";
+		String TOTAL_MAJOR_CR = "data[TotalMajorHours]";
+		String TOTAL_BLANKET_CR = "data[TotalBlanketHour]";
+		String TOTAL_GRAD_CR = "data[TotalGradCr]";
+		String TOTAL_SLASH_CR = "data[TotalSlashCr]";
 		String TOTAL_COURSE_CR = "data[TotalCredits]";
 		String GRAND_TOTAL_CR = "data[GrandTotal]";
 }

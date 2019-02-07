@@ -14,5 +14,7 @@ public interface CourseDAO extends GenericDAO {
 	
 	public ArrayList<CoursePojo> fetchAllCourses();
 	
+	public ArrayList<CoursePojo> fetchSlashCourses();
+	
 	public String updateGradStanding(ArrayList<CoursePojo> courseDetails);
 }

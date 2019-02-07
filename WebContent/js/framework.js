@@ -232,7 +232,9 @@ function updateCurrentCreditCount(){
 
 
 /*this checks for blanketCredit count <= 6,
-and total credits should be atleast 45, non repeating courses*/
+and total credits should be atleast 45, non repeating courses
+also, the slash course credits should be maximum of 50% * total credits
+*/
 function validateAdditionalCourses(){
 		
 		var emptyCredits = false;
@@ -291,6 +293,45 @@ function validateAdditionalCourses(){
 			return false;
 		}
 		
+		var slashCredits = 0;
+		
+		/*find slash courses in Additional courses*/
+		for(i = 0; i < program.AdditionalCourses.length; i++){
+			if(!program.AdditionalCourses[i].isGradCourse){
+				slashCredits = slashCredits + program.AdditionalCourses[i].credits;
+			}
+		}
+		
+		/*find slash courses in bucket courses*/
+		if(!program.CourseArea1.Course1.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea1.Course1.credits;
+		}
+		
+		if(!program.CourseArea1.Course2.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea1.Course2.credits;
+		}
+			
+		if(!program.CourseArea2.Course1.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea2.Course1.credits;
+		}
+		
+		if(!program.CourseArea2.Course2.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea2.Course2.credits;
+		}
+		
+		if(!program.CourseArea3.Course1.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea3.Course1.credits;
+		}
+				
+		if(!program.CourseArea3.Course2.isGradCourse){
+			slashCredits = slashCredits + program.CourseArea3.Course2.credits;
+		}
+		
+		if(slashCredits > (total/2)){
+			console.log('SLASH COURSES CANNOT BE MORE THAN 50% OF TOTAL CREDITS. SLASH_CREDITS = '+slashCredits);
+			alert('Slash courses cannot be more than 50% of the total credits. Current Slash Course Credits = '+slashCredits);
+			return false;
+		}
 		return true;
 }
 
@@ -308,6 +349,7 @@ function saveAdditionalCoursesState(){
 							var courseCode = $(obj).val();
 							var courseTitle = $(this).find('option:selected').data('title');
 							var creditCount = $(this).find('option:selected').data('credits');
+							var isGradCourse = $(this).find('option:selected').data('isgradcourse');
 							var isBlanket = false;
 							
 							if(creditCount == 0){
@@ -323,6 +365,7 @@ function saveAdditionalCoursesState(){
 							additionalCourse.title = courseTitle;
 							additionalCourse.credits = creditCount;
 							additionalCourse.isBlanket = isBlanket;
+							additionalCourse.isGradCourse = isGradCourse;
 							
 							program.AdditionalCourses.push(additionalCourse);
 
@@ -405,7 +448,7 @@ function appendAdditionalCourses(){
 
 		$(allCourseList).each(function(idx, obj){
 			if(!(courseArea1Str.includes(obj.code) || courseArea2Str.includes(obj.code) || courseArea3Str.includes(obj.code))){
-				$('#additionalCoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"'>"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
+				$('#additionalCoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"' data-isgradcourse="+obj.isGradCourse+">"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
 			}
 		});
 		
@@ -505,11 +548,13 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea1.Course1.title = courseArea1Course1Selector.data('title');
 		program.CourseArea1.Course1.credits = courseArea1Course1Selector.data('credits');
 		program.CourseArea1.Course1.isBlanket = false;
+		program.CourseArea1.Course1.isGradCourse = courseArea1Course1Selector.data('isgradcourse');
 
 		program.CourseArea1.Course2.name = courseArea1Course2Selector.val();
 		program.CourseArea1.Course2.title = courseArea1Course2Selector.data('title');
 		program.CourseArea1.Course2.credits = courseArea1Course2Selector.data('credits');
 		program.CourseArea1.Course2.isBlanket = false;
+		program.CourseArea1.Course2.isGradCourse = courseArea1Course2Selector.data('isgradcourse');
 		
 		/*save course area #2 state*/
 		var courseArea2Course1Selector = $($('#courseArea2CoursesDiv select')[0]).find('option:selected');
@@ -518,11 +563,13 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea2.Course1.title = courseArea2Course1Selector.data('title');
 		program.CourseArea2.Course1.credits = courseArea2Course1Selector.data('credits');
 		program.CourseArea2.Course1.isBlanket = false;
+		program.CourseArea2.Course1.isGradCourse = courseArea2Course1Selector.data('isgradcourse');
 
 		program.CourseArea2.Course2.name = courseArea2Course2Selector.val();
 		program.CourseArea2.Course2.title = courseArea2Course2Selector.data('title');
 		program.CourseArea2.Course2.credits = courseArea2Course2Selector.data('credits');
 		program.CourseArea2.Course2.isBlanket = false;
+		program.CourseArea2.Course2.isGradCourse = courseArea2Course2Selector.data('isgradcourse');
 
 		/*save course area #3 state*/
 		var courseArea3Course1Selector = $($('#courseArea3CoursesDiv select')[0]).find('option:selected');
@@ -531,11 +578,13 @@ function saveCourseAreaCoursesState(){
 		program.CourseArea3.Course1.title = courseArea3Course1Selector.data('title');
 		program.CourseArea3.Course1.credits = courseArea3Course1Selector.data('credits');
 		program.CourseArea3.Course1.isBlanket = false;
+		program.CourseArea3.Course1.isGradCourse = courseArea3Course1Selector.data('isgradcourse');
 
 		program.CourseArea3.Course2.name = courseArea3Course2Selector.val();
 		program.CourseArea3.Course2.title = courseArea3Course2Selector.data('title');
 		program.CourseArea3.Course2.credits = courseArea3Course2Selector.data('credits');
 		program.CourseArea3.Course2.isBlanket = false;
+		program.CourseArea3.Course2.isGradCourse = courseArea3Course2Selector.data('isgradcourse');
 		
 		program.Type = $('input[name=courseType][checked=checked]').val();
 		program.Desc = $('input[name=courseType][checked=checked]').parent().data('original-title');
@@ -634,7 +683,7 @@ function appendCourseAreaCourses(courseList){
 		$(courseList['CourseArea1']).each(function(idx, obj){
 			var num = obj.code.split(" ")[1];
 			if(parseInt(obj.credits) > 2){
-				$('#courseArea1CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"'>"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
+				$('#courseArea1CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"' data-isgradcourse="+obj.isGradCourse+">"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
 			}
 		});
 	
@@ -643,7 +692,7 @@ function appendCourseAreaCourses(courseList){
 		$(courseList['CourseArea2']).each(function(idx, obj){
 			var num = obj.code.split(" ")[1];
 			if(parseInt(obj.credits) > 2){
-				$('#courseArea2CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"'>"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
+				$('#courseArea2CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"' data-isgradcourse="+obj.isGradCourse+">"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
 			}
 		});
 		
@@ -652,7 +701,7 @@ function appendCourseAreaCourses(courseList){
 		$(courseList['CourseArea3']).each(function(idx, obj){
 			var num = obj.code.split(" ")[1];
 			if(parseInt(obj.credits) > 2){
-				$('#courseArea3CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"'>"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
+				$('#courseArea3CoursesDiv select').append("<option value='"+obj.code+"' data-title='"+obj.title+"' data-credits='"+obj.credits+"' data-isgradcourse="+obj.isGradCourse+">"+obj.code+" - "+obj.title+" ("+obj.credits+")</option>");
 			}
 		});
 }
