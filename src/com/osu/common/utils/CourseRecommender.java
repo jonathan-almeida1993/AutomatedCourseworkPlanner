@@ -20,7 +20,8 @@ public class CourseRecommender {
 	/*This class provides instance method which recommends courses
 	based on the interest specified by using a model.*/
 	
-	private static final String MODEL_FILE = "D:\\devOps\\eclipse-workspace\\AutomatedCourseworkPlanner\\src\\com\\osu\\common\\utils\\model.json";
+	//private static final String MODEL_FILE = "D:\\devOps\\eclipse-workspace\\AutomatedCourseworkPlanner\\src\\com\\osu\\common\\utils\\model.json";
+	private static final String MODEL_FILE = "/Users/jonathanalmeida/Projects/eclipse-workspace/AutomatedCourseworkPlanner/src/com/osu/common/utils/model.json";
 	
 	private static HashMap<String, ArrayList<String>> model;
 	

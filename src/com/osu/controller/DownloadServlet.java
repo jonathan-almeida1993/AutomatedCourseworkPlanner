@@ -41,7 +41,7 @@ public class DownloadServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		FileInputStream in = new FileInputStream("D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF/result.pdf");
+		FileInputStream in = new FileInputStream("/Users/jonathanalmeida/Projects/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF/result.pdf");
 		
 		//InputStream in = req.getServletContext().getResourceAsStream("/WEB-INF/result.pdf");
 		OutputStream out = resp.getOutputStream();

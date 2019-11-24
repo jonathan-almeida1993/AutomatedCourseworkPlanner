@@ -37,23 +37,28 @@ public interface PDFOtterParameters {
 		String MSPROJECT = "data[Project]";
 		String MS_PROJECT_CREDITS = "data[ProjectCr]";
 		String MS_PROJECT_DEPT = "data[ProjectDept]";
+		String MSPROJECT_G = "data[ProjectG]";
 		
 		String THESIS = "data[Thesis]";
 		String MSTHESIS = "data[MSThesis]";
 		String MS_THESIS_CREDITS = "data[MSThesisCr]";
 		String MS_THESIS_DEPT = "data[MSTHESISDEPT]";
+		String MS_THESIS_G = "data[MSThesisG]";
 		
 		String RESEARCH = "data[Research]";
 		String RESEARCH_DEPT = "data[ResearchDept]";
 		String RESEARCH_CR = "data[ResearchCr]";
+		String RESEARCH_G = "data[ResearchG]";
 
 		String READING = "data[Reading]";
 		String READING_DEPT = "data[ReadingDept]";
 		String READING_CR = "data[ReadingCr]";
+		String READING_G = "data[ReadingG]";
 
 		String INTERNSHIP = "data[Internship]";
 		String INTERNSHIP_DEPT = "data[InternshipDept]";
 		String INTERNSHIP_CR = "data[InternshipCr]";
+		String INTERNSHIP_G = "data[InternshipG]";
 
 		String BLANKET_TOTAL = "data[BlanketTotalCr]";
 		String ETHICAL_TRAINING = "data[EthicalTraining]";

@@ -1,6 +1,6 @@
 package com.osu.database.connection;
 
-import java.io.FileNotFoundException;   
+import java.io.FileNotFoundException;    
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

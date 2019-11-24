@@ -24,7 +24,8 @@ public class ProgramGenerator{
 	
     private static final String ADDRESS = "127.0.0.1";
     private static final int PORT = 65432;
-    private static final String PYTHON_COMPONENT = "D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF";
+    private static final String PYTHON_COMPONENT = "/Users/jonathanalmeida/Projects/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF";
+//    private static final String PYTHON_COMPONENT = "D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/WebContent/WEB-INF";
     
     public static void sendServerData(String data) {
     	
@@ -72,7 +73,7 @@ public class ProgramGenerator{
     	String jsonStr = createProgramJSON(program);
     	
     	//send the json string to server
-		ProcessBuilder pb = new ProcessBuilder("py",PYTHON_COMPONENT+"/generatePDF.py");
+		ProcessBuilder pb = new ProcessBuilder("/usr/local/bin/python3",PYTHON_COMPONENT+"/generatePDF.py");
 	    pb.directory(new File(PYTHON_COMPONENT));
 	    pb.redirectErrorStream(true);
 	    Process p = pb.start();
@@ -115,6 +116,7 @@ public class ProgramGenerator{
 			pdfOtterParams.put(PDFOtterParameters.MSTHESIS, "MS THESIS");
 			pdfOtterParams.put(PDFOtterParameters.MS_THESIS_CREDITS, String.valueOf(program.getCapstoneCredits()));
 			pdfOtterParams.put(PDFOtterParameters.MS_THESIS_DEPT, "CS");
+			pdfOtterParams.put(PDFOtterParameters.MS_THESIS_G, "G");
 			isThesisSet = true;
 		}
 
@@ -123,6 +125,7 @@ public class ProgramGenerator{
 			pdfOtterParams.put(PDFOtterParameters.MSPROJECT, "PROJECT");
 			pdfOtterParams.put(PDFOtterParameters.MS_PROJECT_CREDITS, String.valueOf(program.getCapstoneCredits()));
 			pdfOtterParams.put(PDFOtterParameters.MS_PROJECT_DEPT, "CS");
+			pdfOtterParams.put(PDFOtterParameters.MSPROJECT_G, "G");
 			isProjectSet = true;
 		}
 		
@@ -159,22 +162,27 @@ public class ProgramGenerator{
 						pdfOtterParams.put(PDFOtterParameters.MSTHESIS, course.getTitle());
 						pdfOtterParams.put(PDFOtterParameters.MS_THESIS_CREDITS, String.valueOf(course.getCredits()));
 						pdfOtterParams.put(PDFOtterParameters.MS_THESIS_DEPT, courseDept);
+						pdfOtterParams.put(PDFOtterParameters.MS_THESIS_G, "G");
 					}else if("501".equals(courseNo)) {
 						pdfOtterParams.put(PDFOtterParameters.RESEARCH, course.getTitle());
 						pdfOtterParams.put(PDFOtterParameters.RESEARCH_CR, String.valueOf(course.getCredits()));
 						pdfOtterParams.put(PDFOtterParameters.RESEARCH_DEPT, courseDept);
+						pdfOtterParams.put(PDFOtterParameters.RESEARCH_G, "G");
 					}else if("505".equals(courseNo)) {
 						pdfOtterParams.put(PDFOtterParameters.READING, course.getTitle());
 						pdfOtterParams.put(PDFOtterParameters.READING_CR, String.valueOf(course.getCredits()));
 						pdfOtterParams.put(PDFOtterParameters.READING_DEPT, courseDept);
+						pdfOtterParams.put(PDFOtterParameters.READING_G, "G");
 					}else if("506".equals(courseNo)) {
 						pdfOtterParams.put(PDFOtterParameters.MSPROJECT, course.getTitle());
 						pdfOtterParams.put(PDFOtterParameters.MS_PROJECT_CREDITS, String.valueOf(course.getCredits()));
 						pdfOtterParams.put(PDFOtterParameters.MS_PROJECT_DEPT, courseDept);
+						pdfOtterParams.put(PDFOtterParameters.MSPROJECT_G, "G");
 					}else if("510".equals(courseNo)) {
 						pdfOtterParams.put(PDFOtterParameters.INTERNSHIP, course.getTitle());
 						pdfOtterParams.put(PDFOtterParameters.INTERNSHIP_CR, String.valueOf(course.getCredits()));
 						pdfOtterParams.put(PDFOtterParameters.INTERNSHIP_DEPT, courseDept);
+						pdfOtterParams.put(PDFOtterParameters.INTERNSHIP_G, "G");
 					}
 					
 				}

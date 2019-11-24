@@ -38,7 +38,7 @@ public class DataController extends HttpServlet {
 
 		if(operation != null && CommonConstants.OP_PARSE_CATALOG.equals(operation)) {
 			//process catalog info and store into DB
-			HashMap<String, CoursePojo> courseDetails = CatalogParser.processCourseCatalog("D:/devOps/eclipse-workspace/AutomatedCourseworkPlanner/src/com/osu/common/catalog/rob.json","ROB");
+			HashMap<String, CoursePojo> courseDetails = CatalogParser.processCourseCatalog("/Users/jonathanalmeida/Projects/eclipse-workspace/AutomatedCourseworkPlanner/src/com/osu/common/catalog/rob.json","ROB");
 			ArrayList<CoursePojo> courseDetailsList = new ArrayList<CoursePojo>();
 			for(String key: courseDetails.keySet()) {
 				courseDetailsList.add(courseDetails.get(key));
