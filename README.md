@@ -1,4 +1,3 @@
-AUTOMATED COURSEWORK PLANNER
+GRADPLAN
 
-This project attempts to automate the program of study filing process
-in the CS department at OSU.
+This is a sweet tool which MS in CS students at Oregon State University can use to create their Program of Study as required by the EECS department.
